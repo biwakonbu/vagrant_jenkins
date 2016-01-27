@@ -7,3 +7,7 @@ ssh_config
 
 ## ANSIBLE HOSTS FILE
 hosts
+
+## Rubygems bundle FILES
+.bundle/**
+vendor/bundle/**
