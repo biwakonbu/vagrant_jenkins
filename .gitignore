@@ -1,3 +1,9 @@
 *~
 *.*~
 \#*
+
+## SSH CONFIG FILE
+ssh_config
+
+## ANSIBLE HOSTS FILE
+hosts
