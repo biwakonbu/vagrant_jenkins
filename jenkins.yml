@@ -6,6 +6,9 @@
     - name: install the httpd server
       yum: name=httpd state=latest
 
+    - name: start httpd server
+      service: name=httpd state=running enabled=yes
+
     - name: yum install java-1.7.0-openjdk
       yum: name=java-1.7.0-openjdk state=installed
 
