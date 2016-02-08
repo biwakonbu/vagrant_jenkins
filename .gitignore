@@ -2,6 +2,9 @@
 *.*~
 \#*
 
+## Vagrant files.
+.vagrant/**
+
 ## SSH CONFIG FILE
 ssh_config
 
