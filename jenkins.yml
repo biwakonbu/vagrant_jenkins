@@ -48,3 +48,20 @@
         chdir: /home/vagrant
       notify: restart jenkins
       when: plugin_git | failed
+
+    - name: check jenkins plugin install github
+      shell: |
+        java -jar jenkins-cli.jar -s http://127.0.0.1:8080 list-plugins |
+        egrep '^github\s'
+      args:
+        chdir: /home/vagrant
+      register: plugin_github
+      failed_when: plugin_github.rc not in [0, 1]
+      changed_when: false
+
+    - name: jenkins-cli install-plugin github
+      shell: java -jar jenkins-cli.jar -s http://127.0.0.1:8080 install-plugin github
+      args:
+        chdir: /home/vagrant
+      notify: restart jenkins
+      when: plugin_github | failed
