@@ -31,3 +31,18 @@
         dest=/home/vagrant
         checksum=md5:b5c684faed2b39e21533078a19599348
         force=yes
+
+    - name: check jenkins plugin install git
+      shell: |
+        java -jar jenkins-cli.jar -s http://127.0.0.1:8080 list-plugins |
+        egrep '^git\s+Git plugin\s+([0-9]\.){,2}[0-9]'
+      args:
+        chdir: /home/vagrant
+      register: plugin_git
+      changed_when: false
+
+    - name: jenkins-cli install-plugin git
+      shell: java -jar jenkins-cli.jar -s http://127.0.0.1:8080 install-plugin git
+      args:
+        chdir: /home/vagrant
+      when: plugin_git | failed
