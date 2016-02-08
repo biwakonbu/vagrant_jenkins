@@ -1,7 +1,8 @@
 - hosts: jenkins
   gather_facts: False
   remote_user: vagrant
-  sudo: yes
+  # sudo は廃止.
+  become: yes
   tasks:
     - name: install the httpd server
       yum: name=httpd state=latest
