@@ -39,6 +39,7 @@
       args:
         chdir: /home/vagrant
       register: plugin_git
+      failed_when: plugin_git.rc not in [0, 1]
       changed_when: false
 
     - name: jenkins-cli install-plugin git
