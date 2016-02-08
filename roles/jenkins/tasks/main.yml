@@ -1,30 +1,46 @@
 ---
-- name: yum install java-1.7.0-openjdk
-  yum:
-    name=java-1.7.0-openjdk
-    state=installed
+- include: centos.yml
   when: ansible_os_family == 'RedHat'
 
-- name: get the Jenkins repository
+- name: wget jenkins-cli
   get_url:
-    url=http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
-    dest=/etc/yum.repos.d/jenkins.repo
-  when: ansible_os_family == 'RedHat'
+    url=http://localhost:8080/jnlpJars/jenkins-cli.jar
+    dest=/home/vagrant
+    checksum=md5:b5c684faed2b39e21533078a19599348
+    force=yes
 
-- name: add the Jenkins repository
-  rpm_key:
-    key=http://pkg.jenkins-ci.org/redhat-stable/jenkins-ci.org.key
-  when: ansible_os_family == 'RedHat'
+- name: check jenkins plugin install git
+  shell: |
+    java -jar jenkins-cli.jar -s http://127.0.0.1:8080 list-plugins |
+    egrep '^git\s+Git plugin\s+([0-9]\.){,2}[0-9]'
+  args:
+    chdir: /home/vagrant
+  register: plugin_git
+  failed_when: plugin_git.rc not in [0, 1]
+  changed_when: false
 
-- name: ensure jenkins is at the latest version
-  yum:
-    name=jenkins
-    state=latest
-  when: ansible_os_family == 'RedHat'
+- name: jenkins-cli install-plugin git
+  shell: java -jar jenkins-cli.jar -s http://127.0.0.1:8080 install-plugin git
+  args:
+    chdir: /home/vagrant
+  notify: restart jenkins
+  when: plugin_git | failed
 
-- name: ensure jenkins is running and enabled
-  service:
-    name=jenkins
-    state=running
-    enabled=yes
-  when: ansible_os_family == 'RedHat'
+- name: check jenkins plugin install github
+  shell: |
+    java -jar jenkins-cli.jar -s http://127.0.0.1:8080 list-plugins |
+    egrep '^github\s'
+  args:
+    chdir: /home/vagrant
+  register: plugin_github
+  failed_when: plugin_github.rc not in [0, 1]
+  changed_when: false
+
+- name: jenkins-cli install-plugin github
+  shell: |
+    java -jar jenkins-cli.jar -s http://127.0.0.1:8080 install-plugin github
+  args:
+    chdir: /home/vagrant
+  notify: restart jenkins
+  when: plugin_github | failed
+
