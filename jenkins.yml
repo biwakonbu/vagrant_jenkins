@@ -24,3 +24,10 @@
 
     - name: ensure jenkins is running and enabled
       service: name=jenkins state=running enabled=yes
+
+    - name: wget jenkins-cli
+      get_url:
+        url=http://localhost:8080/jnlpJars/jenkins-cli.jar
+        dest=/home/vagrant
+        checksum=md5:b5c684faed2b39e21533078a19599348
+        force=yes
