@@ -46,4 +46,5 @@
       shell: java -jar jenkins-cli.jar -s http://127.0.0.1:8080 install-plugin git
       args:
         chdir: /home/vagrant
+      notify: restart jenkins
       when: plugin_git | failed
