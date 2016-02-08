@@ -65,3 +65,8 @@
         chdir: /home/vagrant
       notify: restart jenkins
       when: plugin_github | failed
+
+
+  handlers:
+    - name: restart jenkins
+      service: name=httpd state=restarted
