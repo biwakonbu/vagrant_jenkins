@@ -1,15 +1,13 @@
 - hosts: jenkins
-  gather_facts: False
+  # gather_facts は host 情報の読み込みの有無の設定.
+  gather_facts: true
   remote_user: vagrant
   # sudo は廃止.
   become: yes
+  roles:
+    - apache2
+
   tasks:
-    - name: install the httpd server
-      yum: name=httpd state=latest
-
-    - name: start httpd server
-      service: name=httpd state=running enabled=yes
-
     - name: yum install java-1.7.0-openjdk
       yum: name=java-1.7.0-openjdk state=installed
 

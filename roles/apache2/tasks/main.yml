@@ -1,0 +1,8 @@
+---
+- name: install the httpd server
+  yum: name=httpd state=latest
+  when: ansible_os_family == 'RedHat'
+
+- name: start httpd server
+  service: name=httpd state=running enabled=yes
+  when: ansible_os_family == 'RedHat'
